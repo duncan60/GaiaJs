@@ -1,5 +1,5 @@
 /*
- * GaiaJs v0.1.1
+ * GaiaJs v0.1.2
  * http://www.checkme.tw/wordpress/
  *
  * Copyright (c) 2012 Duncan Du
