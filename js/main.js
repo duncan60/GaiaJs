@@ -48,6 +48,10 @@ var gaiaJs_main=(function(){
 		  width:720,
 		  height:400
 		 });
+		$("#demo2").groupIndex({
+  			bindType:'click',
+  			callBack:function(num,target){alert("第"+num+"被點擊");}
+		});
 	}
 	/* end */
 	//配置參數

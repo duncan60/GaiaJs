@@ -14,7 +14,7 @@
 		{
 			"id":"youtube",
 			"path":"{base}youtubeBox.html #page",
-			"resource":["js/plugin/jquery-youtubeBox.js"]
+			"resource":["js/plugin/jquery-youtubeBox.js","js/plugin/jquery-groupIndex.js"]
 		}
 	]
 }
