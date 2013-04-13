@@ -1,8 +1,34 @@
-var gaiaJs_main=(function(){	
-	var gaia,$loader,$content;
+var siteMap={	
+	loader:"#loader",
+	content:"#content",
+	nav:".btn-list li a",
+	page:[
+		{
+			id:"home",
+			title:"GaiaJs v1.0:Home",
+			path:"{base}home.html #page"
+		},
+		{
+			id:"flash",
+			title:"GaiaJs v1.0:flash",
+			path:"{base}page1.html #page",
+			resource:["js/swfobject.js"]
+		},
+		{
+			id:"youtube",
+			title:"GaiaJs v1.0:youtube",
+			path:"{base}youtubeBox.html #page",
+			resource:["js/plugin/jquery-youtubeBox.js","js/plugin/jquery-groupIndex.js"]
+		}
+	]
+};
+
+(function(){	
+	var $loader,$content,$nav;
 	//gaiaJs初始化完畢
-	var gaiaInitComplete=function(c,l){
+	var gaiaInitComplete=function(c,n,l){
 		$content=$(c);
+		$nav=$(n);
 		$loader=$(l);
 	};
 	//內容退場，loading出現，開始載入動作 
@@ -10,7 +36,7 @@ var gaiaJs_main=(function(){
 		$content.fadeOut('slow',function(){
 			$loader.css('width',"0%");
 			$loader.fadeIn('slow');
-			gaia.loadStart();
+			GaiaJs.loadStart();
 		})
 	};
 	//載入進度
@@ -24,18 +50,30 @@ var gaiaJs_main=(function(){
 			$content.fadeIn('slow');
 			pageInit(id);
 		});
-		
 	};
 	/*  page init  */
 	var pageInit=function(id){
 		switch(id){
+			case "home":
+				enabledNav(0);
+			break;
 			case "flash":
 				flashInit();
+				enabledNav(1);
 			break;
 			case "youtube":
 				youtubeInit();
+				enabledNav(2);
 			break;
 		}
+	}
+	var enabledNav=function(num){
+		$nav.each(function(index, element) {
+			$(this).removeClass('active');
+			if(index==num){
+				$(this).addClass('active');
+			}
+		});
 	}
 	var flashInit=function(){
 		var flashvars = {};
@@ -50,18 +88,20 @@ var gaiaJs_main=(function(){
 		 });
 		$("#demo2").groupIndex({
   			bindType:'click',
-  			callBack:function(num,target){alert("第"+num+"被點擊");}
+  			callBack:function(num,target){alert("第"+(num+1)+"被點擊");}
 		});
 	}
 	/* end */
-	//配置參數
+	//gaiaJs設定
+
 	var configObj={
 		base:"page/",
-		initComplete:gaiaInitComplete,
-		transitionIn:transitionIn,
-		transitionOut:transitionOut,
-		progress:loadProgress
+		siteMap:siteMap
 	};
-	gaia=GaiaJs();
-	gaia.init(configObj);
+	GaiaJs.initComplete=gaiaInitComplete;
+	GaiaJs.transitionOut=transitionOut;
+	GaiaJs.progress=loadProgress;
+	GaiaJs.transitionIn=transitionIn;
+	GaiaJs.init(configObj);
+
 })();

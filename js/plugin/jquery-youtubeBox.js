@@ -18,7 +18,7 @@ opacity:0.4,//背景透明度
 		    $yb,
 		    $yp,
 			_this,
-			_layerBox="<div class=\"y_layerBox\" style=\"position:absolute;width:100%;height:100%;top:0px;left:0px;z-index:999;\"><div class=\"y_layerBg\" style=\"width:100%;height:100%;background-color:{c};opacity:0.4;filter:alpha(opacity={ie_o});-moz-opacity:{o};position:fixed;display:block;\"></div></div>",
+			_layerBox="<div class=\"y_layerBox\" style=\"position:absolute;width:100%;height:100%;top:0px;left:0px;\"><div class=\"y_layerBg\" style=\"z-index:999;width:100%;height:100%;background-color:{c};opacity:0.4;filter:alpha(opacity={ie_o});-moz-opacity:{o};position:fixed;display:block;\"></div></div>",
 			_youtube="<iframe id=\"cfifram\" width={w} height={h} scrolling=\"auto\" src=\"http://www.youtube.com/embed/{id}?rel=0&autoplay={a}\" frameborder=\"0\" allowfullscreen>'",
 			_addStr="";
 		return this.each(function(){
@@ -69,6 +69,7 @@ opacity:0.4,//背景透明度
 				$yp.css({'top': ($(window).height()/2-$yp.height()/2)+"px",'left': ($(window).width()/2-$yp.width()/2)+"px"});	
 		}
 		function bgClick(e){
+			e.preventDefault();
 			if ($yb!=undefined){
 				$yb.remove();
 				$(window).unbind('resize',center);
