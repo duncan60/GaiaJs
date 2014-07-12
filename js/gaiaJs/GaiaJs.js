@@ -1,15 +1,16 @@
 /*
- * GaiaJs v1.0.0
+ * GaiaJs v1.0.2
  * http://www.checkme.tw/wordpress/
  *
- * Copyright (c) 2012 Duncan Du
- * Date: 2013-04-12
+ * Copyright (c) 2014 Duncan Du
+ * Date: 2013-07-12
 */
 
 var GaiaJs=(function(){
 	var Singleton={
 			base:'',
-			siteMap:""
+			siteMap:"",
+			firstBol:false
 		},
 		$pageContent,$loader,$nav,that;
 	var initialization=function(obj){
@@ -60,12 +61,18 @@ var GaiaJs=(function(){
 					loadPage(_s.siteMap.page[0]);
 					return;
 				}
-				_s.siteMap.page[num].id==_s.id?loadPage(_s.siteMap.page[num]):findPath(num+1);
+				_s.siteMap.page[num].id.toUpperCase()==_s.id.toUpperCase()?loadPage(_s.siteMap.page[num]):findPath(num+1);
 			}
 			var loadPage=function(obj){
 				address.route(Singleton).changeTitle(obj.title);
 				$.when(getResource(obj.resource))
 			　　 .done(function(){ 
+					if(!_s.siteMap.loadWait){
+						$pageContent.load(obj.path.replace("{base}",_s.base),function(){
+							controller("t_In");
+						});
+						return;
+					}
 					$pageContent.load(obj.path.replace("{base}",_s.base),function(){
 						controller('loadimg');
 					});
@@ -100,7 +107,6 @@ var GaiaJs=(function(){
 				$t.find('*').each(function(){
 					var bg=$(this).css("background-image").replace(patt,'');
 					if(bg!='none'){pa.push(bg);}
-					delete bg;
 				})
 				pl=pa.length;
 				if(pl==0){
@@ -129,8 +135,6 @@ var GaiaJs=(function(){
 				if(_c==pa.length){
 					controller("t_In");	
 					pa=null;
-					delete pa;
-					delete pl;	
 					return;
 
 				}
@@ -146,14 +150,23 @@ var GaiaJs=(function(){
 	var address={
 		route:function(_s){
 			var addressChange=function(event){
-				_s.id=event.value!=""?event.value.replace('/',""):_s.siteMap.page[0].id;
-				controller("t_Out");
+				if(_s.firstBol==false){
+					_s.id=event.value!=""?event.value.replace('/',""):_s.siteMap.page[0].id;
+					_s.firstBol=true;
+					controller("t_Out");	
+				}else if(_s.id!=event.value){
+					_s.id=event.value!=""?event.value.replace('/',""):_s.siteMap.page[0].id;
+					controller("t_Out");
+				}
 			};
 			return{
 				init:function(){
 					_s.address=$.address;
-					_s.address.init(function(event) {$nav.address();}).change(addressChange);
-					_s.id=_s.address.value()!=""?_s.address.value():_s.siteMap.page[0].id;
+					$nav.address();
+					$(".server-unit a").address();
+					_s.address.strict(false).init(function(event) {}).change(addressChange);
+					_s.id=_s.address.value()!=""?_s.address.value():_s.siteMap.page[0].id;	
+
 				},
 				changeTitle:function(title){
 					_s.address.title(title);	
@@ -161,6 +174,7 @@ var GaiaJs=(function(){
 			}
 		}
 	};
+	
 	that={
 		init:function(obj){
 			initialization(obj);
