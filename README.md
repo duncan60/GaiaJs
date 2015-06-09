@@ -1,4 +1,4 @@
 # GaiaJs
-v0.1.2
+v1.0.2
 
 more : http://www.checkme.tw/wordpress/category/gaiajs/
